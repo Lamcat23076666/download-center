@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trung Tâm Tải Về</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f4f4f4; }
+        .btn { padding: 15px 30px; font-size: 20px; color: white; background: #007bff; border: none; border-radius: 5px; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Sẵn sàng tải xuống</h1>
+    <p>Nhấn vào nút bên dưới để bắt đầu tải file an toàn.</p>
+    <button class="btn" onclick="secureDownload('ten_file_cua_ban.zip')">TẢI XUỐNG NGAY</button>
+
+    <script>
+        async function secureDownload(fileName) {
+            try {
+                const response = await fetch(fileName);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName; // Hoặc đổi tên file tại đây
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert("Có lỗi xảy ra, vui lòng thử lại!");
+            }
+        }
+    </script>
+</body>
+</html>
