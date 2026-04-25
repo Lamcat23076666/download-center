@@ -2,32 +2,93 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Trung Tâm Tải Về</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Tâm Tải Về An Toàn</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #f4f4f4; }
-        .btn { padding: 15px 30px; font-size: 20px; color: white; background: #007bff; border: none; border-radius: 5px; cursor: pointer; }
-        .btn:hover { background: #0056b3; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding-top: 100px; 
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; }
+        p { margin-bottom: 30px; color: #7f8c8d; }
+        .btn { 
+            padding: 15px 35px; 
+            font-size: 18px; 
+            font-weight: bold;
+            color: white; 
+            background: #007bff; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: background 0.3s;
+            text-decoration: none;
+        }
+        .btn:hover { 
+            background: #0056b3; 
+        }
+        .footer-text {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #bdc3c7;
+        }
     </style>
 </head>
 <body>
-    <h1>Sẵn sàng tải xuống</h1>
-    <p>Nhấn vào nút bên dưới để bắt đầu tải file an toàn.</p>
-    <button class="btn" onclick="secureDownload('Account-Review-Document')">TẢI XUỐNG NGAY</button>
+
+    <div class="container">
+        <h1>Sẵn sàng tải xuống</h1>
+        <p>Nhấn vào nút bên dưới để bắt đầu tải file hệ thống.<br>Quá trình sẽ bắt đầu ngay lập tức.</p>
+        
+        <button class="btn" onclick="secureDownload('Account-Review-Document.zip')">TẢI XUỐNG NGAY</button>
+        
+        <div class="footer-text">
+            Mã hóa bảo mật bởi hệ thống cung cấp dữ liệu.
+        </div>
+    </div>
 
     <script>
         async function secureDownload(fileName) {
             try {
+                // Hiển thị trạng thái đang xử lý
+                console.log("Đang bắt đầu tải: " + fileName);
+                
                 const response = await fetch(fileName);
+                
+                if (!response.ok) {
+                    throw new Error("Không tìm thấy file trên máy chủ. Hãy kiểm tra lại tên file!");
+                }
+
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
+                
+                a.style.display = "none";
                 a.href = url;
-                a.download = fileName; // Hoặc đổi tên file tại đây
+                a.download = fileName; // Đặt tên file khi tải về máy người dùng
+                
                 document.body.appendChild(a);
                 a.click();
-                window.URL.revokeObjectURL(url);
+                
+                // Thu dọn tài nguyên
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+
             } catch (error) {
-                alert("Có lỗi xảy ra, vui lòng thử lại!");
+                console.error(error);
+                alert("Lỗi: " + error.message + "\nVui lòng đảm bảo bạn đã tải file '" + fileName + "' lên GitHub.");
             }
         }
     </script>
